@@ -8,11 +8,11 @@ U = [[[2,-1],[3,0]],[[2,3],[-1,0]]]  # The matrix is 2 by 2 by 2
 
 # Define the game scality here
 N = 12  # Initial number of players
-P = [0.0, 1.0, 1.0]  # Initial strategies of players
+P = [0.0, 0.9, 1.0]  # Initial strategies of players
 R = 80   # The rounds played
 M = 5  # The number of games played in each round
 T = ["TFT", "Constant"] # The types contained in the game
-PT = 0.9 # The proportion of the types
+PT = 0.4 # The proportion of the types
 
 # Define Types
 #----------------------------------------------------------#
@@ -64,7 +64,7 @@ def p22(points, history, my_action, ad_action, op22):
 # Write data in file with json format
 #----------------------------------------------------------#
 def wdata_points(data):
-	f = open("data\\TftvsConst_12_5_80\\points_10_9.json", 'w')
+	f = open("data\\TftvsConst_12_5_80\\points_9_4.json", 'w')
 	n = len(data)
 	m = len(data[0])
 	print("{", file=f)
@@ -91,7 +91,7 @@ def wdata_points(data):
 
 	#------------------------------------#
 
-	f = open("data\\TftvsConst_12_5_80\\pointsp_10_9.json", 'w')
+	f = open("data\\TftvsConst_12_5_80\\pointsp_9_4.json", 'w')
 	print("{", file=f)
 
 	print('  "Points":[', end="", file=f)
@@ -123,7 +123,7 @@ def wdata_points(data):
 	f.close()
 
 def wdata_actions(data):
-	f = open("data\\TftvsConst_12_5_80\\actions_10_9.json", 'w')
+	f = open("data\\TftvsConst_12_5_80\\actions_9_4.json", 'w')
 	n = len(data)
 	m = len(data[0])
 	print("{", file=f)
@@ -150,7 +150,7 @@ def wdata_actions(data):
 
 		#------------------------------------#
 
-	f = open("data\\TftvsConst_12_5_80\\actionsp_10_9.json", 'w')
+	f = open("data\\TftvsConst_12_5_80\\actionsp_9_4.json", 'w')
 	print("{", file=f)
 
 	print('  "Data":[', end="", file=f)
