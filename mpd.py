@@ -1,4 +1,5 @@
 import random as rnd
+import numpy as np
 from copy import deepcopy
 
 #-----------------Parameters modified here-----------------#
@@ -45,6 +46,19 @@ Kr = 2
 # For RKrenvenger
 Krb = 2
 Krc = 2
+
+# For Bayesian
+def p11(points, history, my_action, ad_action, op11):
+	return 1
+
+def p12(points, history, my_action, ad_action, op12):
+	return 0
+
+def p21(points, history, my_action, ad_action, op21):
+	return 1
+
+def p22(points, history, my_action, ad_action, op22):
+	return 0
 #----------------------------------------------------------#
 
 # Write data in file with json format
@@ -133,6 +147,10 @@ class player:
 
 		self._history = {}       # The playing history of the players
 
+		#--For Bayesian Type--#
+		self._matrix = np.matrix([[1., 0.], [0., 1.]])
+		#---------------------#
+
 	def index(self):             # Get id of the player
 		return self._id
 
@@ -187,6 +205,11 @@ class player:
 				self._strategy[idx] = 0.
 			elif cCoop_times(self._history[idx]) > Krc:
 				self._strategy[idx] = 1.
+		elif self.getType() == "Bayesian":
+			self._matrix[0, 0] = p11(self.points(), self._history, my_action, ad_action, self._matrix[0, 0])
+			self._matrix[0, 1] = p12(self.points(), self._history, my_action, ad_action, self._matrix[0, 1])
+			self._matrix[1, 0] = p21(self.points(), self._history, my_action, ad_action, self._matrix[1, 0])
+			self._matrix[1, 1] = p22(self.points(), self._history, my_action, ad_action, self._matrix[1, 1])
 	#----------------To be implenmented----------------#
 
 	def points(self):
