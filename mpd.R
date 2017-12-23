@@ -1,5 +1,5 @@
 N <- 4
-ROUND <- 5
+ROUND <- 20
 
 rawjson <- rjson::fromJSON(file = "data/points.json")
 rawpjson <- rjson::fromJSON(file = "data/pointsp.json")
@@ -9,9 +9,9 @@ Datap <- as.data.frame(rawpjson)
 
 print(Data)
 
-ggplot2::ggplot(Datap[1:N*ROUND,],
-                ggplot2::aes(x=x.label[1:N*ROUND],
-                             y=Data[1:N*ROUND],
-                             group=categ[1:N*ROUND],
-                             color=categ[1:N*ROUND])
+ggplot2::ggplot(Datap,
+                ggplot2::aes(x=Round,
+                             y=Points,
+                             group=categ,
+                             color=categ)
                 ) + ggplot2::geom_line(size=1.2)

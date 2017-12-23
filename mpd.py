@@ -9,9 +9,9 @@ U = [[[2,-1],[3,0]],[[2,3],[-1,0]]]  # The matrix is 2 by 2 by 2
 # Define the game scality here
 N = 4  # Initial number of players
 P = [0.0, 0.5, 1.0]  # Initial strategies of players
-R = 5   # The rounds played
+R = 20   # The rounds played
 M = 2  # The number of games played in each round
-T = ["Constant", "Random"] # The types contained in the game
+T = ["TFT", "Constant"] # The types contained in the game
 PT = 0.5 # The proportion of the types
 
 # Define Types
@@ -94,7 +94,7 @@ def wdata_points(data):
 	f = open("data\\pointsp.json", 'w')
 	print("{", file=f)
 
-	print('  "Data":[', end="", file=f)
+	print('  "Points":[', end="", file=f)
 	for i in range(n-1):
 		for j in range(m):
 			print(str(data[i][j]), end=",", file=f)
@@ -102,13 +102,13 @@ def wdata_points(data):
 		print(str(data[n-1][i]), end=",", file=f)
 	print(str(data[n-1][m-1])+'],', file=f)
 
-	print('  "x.label":[', end="", file=f)
+	print('  "Round":[', end="", file=f)
 	for i in range(n-1):
 		for j in range(m):
-			print('"ROUND'+str(j+1)+'"', end=",", file=f)
+			print(str(j+1), end=",", file=f)
 	for i in range(m-1):
-		print('"ROUND'+str(i+1)+'"', end=",", file=f)
-	print('"ROUND'+str(m)+'"],', file=f)
+		print(str(i+1), end=",", file=f)
+	print(str(m)+'],', file=f)
 
 	print('  "categ":[', end="", file=f)
 	for i in range(n-1):
