@@ -27,15 +27,24 @@ Action_based:	change the strategy based on the current point;
 '''
 TFT:			tit for tat
 Co_TFT:			co-tft
+Revenger:		revenge if one cheats
+Krevenger:		revenge if one cheats k times
+RKrevenger:		may recover after some times not cheating
+Bayesian:		step update based on probability
 '''
 
-Types = ["Constant", "Random", "Action_based", "TFT", "Co_TFT"]
+Types = ["Constant", "Random", "Action_based", "TFT", "Co_TFT", "Revenger", "Krevenger", "RKrevenger", "Bayesian"]
 
 # Parameters
 # For Action_based
 Ka = 0.02
 # For Co_TFT
 Kc = 2
+# For Krevenger
+Kr = 2
+# For RKrenvenger
+Krb = 2
+Krc = 2
 #----------------------------------------------------------#
 
 # Write data in file with json format
@@ -103,6 +112,15 @@ def cBetray_times(history):
 			break
 	return times
 
+def cCoop_times(history):
+	times = 0
+	for i in range(history[0] + 1, 2, -1):
+		if history[i] == 0:
+			times += 1
+		else:
+			break
+	return times
+
 #-------------------Classes defined here-------------------#
 # Class for the each player
 class player:
@@ -158,6 +176,17 @@ class player:
 					self._strategy[idx] = 0.
 				else:
 					self._strategy[idx] = 1.
+		elif self.getType() == "Revenger":
+			if ad_action == 1:
+				self._strategy[idx] = 0.
+		elif self.getType() == "Krevenger":
+			if cBetray_times(self._history[idx]) > Kr:
+				self._strategy[idx] = 0.
+		elif self.getType() == "RKrevenger":
+			if cBetray_times(self._history[idx]) > Krb:
+				self._strategy[idx] = 0.
+			elif cCoop_times(self._history[idx]) > Krc:
+				self._strategy[idx] = 1.
 	#----------------To be implenmented----------------#
 
 	def points(self):
