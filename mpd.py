@@ -9,7 +9,7 @@ U = [[[2,-1],[3,0]],[[2,3],[-1,0]]]  # The matrix is 2 by 2 by 2
 # Define the game scality here
 N = 4  # Initial number of players
 P = [0.0, 0.5, 1.0]  # Initial strategies of players
-R = 4   # The rounds played
+R = 5   # The rounds played
 M = 2  # The number of games played in each round
 T = ["Constant", "Random"] # The types contained in the game
 PT = 0.5 # The proportion of the types
@@ -89,6 +89,39 @@ def wdata_points(data):
 
 	f.close()
 
+	#------------------------------------#
+
+	f = open("data\\pointsp.json", 'w')
+	print("{", file=f)
+
+	print('  "Data":[', end="", file=f)
+	for i in range(n-1):
+		for j in range(m):
+			print(str(data[i][j]), end=",", file=f)
+	for i in range(m-1):
+		print(str(data[n-1][i]), end=",", file=f)
+	print(str(data[n-1][m-1])+'],', file=f)
+
+	print('  "x.label":[', end="", file=f)
+	for i in range(n-1):
+		for j in range(m):
+			print('"ROUND'+str(j+1)+'"', end=",", file=f)
+	for i in range(m-1):
+		print('"ROUND'+str(i+1)+'"', end=",", file=f)
+	print('"ROUND'+str(m)+'"],', file=f)
+
+	print('  "categ":[', end="", file=f)
+	for i in range(n-1):
+		for j in range(m):
+			print('"player'+str(i)+'"', end=",", file=f)
+	for i in range(m-1):
+		print('"player'+str(n-1)+'"', end=",", file=f)
+	print('"player'+str(n-1)+'"]', file=f)
+
+	print("}", file=f)
+
+	f.close()
+
 def wdata_actions(data):
 	f = open("data\\actions.json", 'w')
 	n = len(data)
@@ -110,6 +143,39 @@ def wdata_actions(data):
 	for j in range(n-1):
 		print('"'+str(data[j][m-1])+'"', end=",", file=f)
 	print('"'+str(data[n-1][m-1])+'"]', file=f)
+
+	print("}", file=f)
+
+	f.close()
+
+		#------------------------------------#
+
+	f = open("data\\actionsp.json", 'w')
+	print("{", file=f)
+
+	print('  "Data":[', end="", file=f)
+	for i in range(n-1):
+		for j in range(m):
+			print(str(data[i][j]), end=",", file=f)
+	for i in range(m-1):
+		print(str(data[n-1][i]), end=",", file=f)
+	print(str(data[n-1][m-1])+'],', file=f)
+
+	print('  "x.label":[', end="", file=f)
+	for i in range(n-1):
+		for j in range(m):
+			print('"ROUND'+str(j+1)+'"', end=",", file=f)
+	for i in range(m-1):
+		print('"ROUND'+str(i+1)+'"', end=",", file=f)
+	print('"ROUND'+str(m)+'"],', file=f)
+
+	print('  "categ":[', end="", file=f)
+	for i in range(n-1):
+		for j in range(m):
+			print('"player'+str(i)+'"', end=",", file=f)
+	for i in range(m-1):
+		print('"player'+str(n-1)+'"', end=",", file=f)
+	print('"player'+str(n-1)+'"]', file=f)
 
 	print("}", file=f)
 
