@@ -7,10 +7,10 @@ from copy import deepcopy
 U = [[[2,-1],[3,0]],[[2,3],[-1,0]]]  # The matrix is 2 by 2 by 2
 
 # Define the game scality here
-N = 4  # Initial number of players
-P = [0.0, 0.5, 1.0]  # Initial strategies of players
+N = 8  # Initial number of players
+P = [0.0, 0.2, 1.0]  # Initial strategies of players
 R = 20   # The rounds played
-M = 2  # The number of games played in each round
+M = 4  # The number of games played in each round
 T = ["TFT", "Constant"] # The types contained in the game
 PT = 0.5 # The proportion of the types
 
@@ -314,7 +314,7 @@ class game:
 		self._players = []                       # Generate the list of players where each has an id
 		p = int(Prop * n)
 		for i in range(p):
-			self._players.append(player(i, p0[1], Types[0]))
+			self._players.append(player(i, p0[2], Types[0]))
 		for i in range(p, n):
 			self._players.append(player(i, p0[1], Types[1]))
 		#---------------Need Modified---------------#
