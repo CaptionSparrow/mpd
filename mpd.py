@@ -33,7 +33,9 @@ Types = ["Constant", "Random", "Action_based", "TFT", "Co_TFT"]
 
 # Parameters
 # For Action_based
-K = 0.02
+Ka = 0.02
+# For Co_TFT
+Kc = 2
 #----------------------------------------------------------#
 
 # Write data in file with json format
@@ -91,6 +93,16 @@ def wdata_actions(data):
 	f.close()
 #----------------------------------------------------------#
 
+# Some useful functions
+def cBetray_times(history):
+	times = 0
+	for i in range(history[0] + 1, 2, -1):
+		if history[i] == 1:
+			times += 1
+		else:
+			break
+	return times
+
 #-------------------Classes defined here-------------------#
 # Class for the each player
 class player:
@@ -130,9 +142,9 @@ class player:
 			self._strategy[idx] = new_strategy
 		elif self.getType() == "Action_based":
 			if ad_action == 0:
-				self._strategy[idx] = min(self._strategy[idx] + K * self.points(), 1.)
+				self._strategy[idx] = min(self._strategy[idx] + Ka * self.points(), 1.)
 			else:
-				self._strategy[idx] = max(self._strategy[idx] - K * self.points(), 0.)
+				self._strategy[idx] = max(self._strategy[idx] - Ka * self.points(), 0.)
 		elif self.getType() == "TFT":
 			if ad_action == 0:
 				self._strategy[idx] = 1.
@@ -142,7 +154,10 @@ class player:
 			if ad_action == 0:
 				self._strategy[idx] = 1.
 			else:
-				pass
+				if cBetray_times(self._history[idx]) > Kc:
+					self._strategy[idx] = 0.
+				else:
+					self._strategy[idx] = 1.
 	#----------------To be implenmented----------------#
 
 	def points(self):
