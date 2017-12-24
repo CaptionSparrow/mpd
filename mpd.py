@@ -1,6 +1,7 @@
 import random as rnd
 import numpy as np
 from copy import deepcopy
+from math import inf
 
 #-----------------Parameters modified here-----------------#
 # Define the utility matrix here
@@ -48,17 +49,47 @@ Krb = 2
 Krc = 2
 
 # For Bayesian
-def p11(points, history, my_action, ad_action, op11):
-	return 1
+Kb = 5
 
-def p12(points, history, my_action, ad_action, op12):
-	return 0
+def p11(history, myhistory):
+	if history[0] < Kb:
+		return 1
+	else:
+		p = CoopCoop_times(history, myhistory)
+		if p == inf:
+			return 1
+		else:
+			return p
 
-def p21(points, history, my_action, ad_action, op21):
-	return 1
+def p12(history, myhistory):
+	if history[0] < Kb:
+		return 0
+	else:
+		p = CoopBetray_times(history, myhistory)
+		if p == inf:
+			return 1
+		else:
+			return p
 
-def p22(points, history, my_action, ad_action, op22):
-	return 0
+def p21(history, myhistory):
+	if history[0] < Kb:
+		return 1
+	else:
+		p = BetrayCoop_times(history, myhistory)
+		if p == inf:
+			return 1
+		else:
+			return p
+
+def p22(history, myhistory):
+	if history[0] < Kb:
+		return 0
+	else:
+		p = BetrayBetray_times(history, myhistory)
+		if p == inf:
+			return 1
+		else:
+			return p
 #----------------------------------------------------------#
 
 # Write data in file with json format
@@ -201,6 +232,44 @@ def cCoop_times(history):
 			break
 	return times
 
+def BetrayBetray_times(history, myhistory):
+	if myhistory[1] == 0:
+		return inf
+	else:
+		m = 0
+		n = 0
+		for i in range(2, history[0] + 1):
+			if myhistory[i] == 1:
+				n += 1
+				if history[i] == 1:
+					m += 1
+		return m / n
+
+def CoopBetray_times(history, myhistory):
+	if myhistory[1] == 0:
+		return inf
+	else:
+		return 1 - BetrayBetray_times(history, myhistory)
+
+def BetrayCoop_times(history, myhistory):
+	if myhistory[0] == myhistory[1]:
+		return inf
+	else:
+		m = 0
+		n = 0
+		for i in range(2, history[0] + 1):
+			if myhistory[i] == 0:
+				n += 1
+				if history[i] == 1:
+					m += 1
+		return m / n
+
+def CoopCoop_times(history, myhistory):
+	if myhistory[0] == myhistory[1]:
+		return inf
+	else:
+		return 1 - BetrayCoop_times(history, myhistory)
+
 #-------------------Classes defined here-------------------#
 # Class for the each player
 class player:
@@ -212,6 +281,7 @@ class player:
 		self._type = Type
 
 		self._history = {}       # The playing history of the players
+		self._myhistory = {}     # The playing history of the player self
 
 		#--For Bayesian Type--#
 		self._matrix = np.matrix([[1., 0.], [0., 1.]])
@@ -272,10 +342,13 @@ class player:
 			elif cCoop_times(self._history[idx]) > Krc:
 				self._strategy[idx] = 1.
 		elif self.getType() == "Bayesian":
-			self._matrix[0, 0] = p11(self.points(), self._history, my_action, ad_action, self._matrix[0, 0])
-			self._matrix[0, 1] = p12(self.points(), self._history, my_action, ad_action, self._matrix[0, 1])
-			self._matrix[1, 0] = p21(self.points(), self._history, my_action, ad_action, self._matrix[1, 0])
-			self._matrix[1, 1] = p22(self.points(), self._history, my_action, ad_action, self._matrix[1, 1])
+			self._matrix[0, 0] = p11(self._history[idx], self._myhistory[idx])
+			self._matrix[0, 1] = p12(self._history[idx], self._myhistory[idx])
+			self._matrix[1, 0] = p21(self._history[idx], self._myhistory[idx])
+			self._matrix[1, 1] = p22(self._history[idx], self._myhistory[idx])
+			old_p = np.matrix([[self.strategy(idx)], [1 - self.strategy(idx)]])
+			new_p = np.dot(self._matrix, old_p)
+			self._strategy[idx] = new_p[0, 0]
 	#----------------To be implenmented----------------#
 
 	def points(self):
@@ -295,15 +368,21 @@ class player:
 		else:
 			return 1                     # 1 means betrayal
 
-	def update_history(self, adversary, ad_action):
+	def update_history(self, adversary, ad_action, my_action):
 		if adversary.index() in self._history:
-			self._history[adversary.index()][0] += 1			# Playing times add 1
-			self._history[adversary.index()][1] += ad_action	# Times betrayal add 1
+			self._history[adversary.index()][0] += 1				# Playing times add 1
+			self._history[adversary.index()][1] += ad_action		# Times betrayal add 1
 			self._history[adversary.index()].append(ad_action)
+			self._myhistory[adversary.index()][0] += 1				# Playing times add 1
+			self._myhistory[adversary.index()][1] += my_action		# Times betrayal add 1
+			self._myhistory[adversary.index()].append(my_action)
 		else:
-			self._history[adversary.index()] = [1]				# Playing times be 1
-			self._history[adversary.index()].append(ad_action)	# Betrayal times
+			self._history[adversary.index()] = [1]					# Playing times be 1
+			self._history[adversary.index()].append(ad_action)		# Betrayal times
 			self._history[adversary.index()].append(ad_action)
+			self._myhistory[adversary.index()] = [1]				# Playing times be 1
+			self._myhistory[adversary.index()].append(my_action)	# Betrayal times
+			self._myhistory[adversary.index()].append(my_action)
 
 # Class for the game
 class game:
@@ -356,8 +435,8 @@ class game:
 				self.players(id_a).add_points(self.utility[0][action_a][action_b]) # Update the score of player one
 				self.players(id_b).add_points(self.utility[1][action_a][action_b]) # Update the score of player two
 
-				self.players(id_a).update_history(self.players(id_b), action_b) # Update the history of player one
-				self.players(id_b).update_history(self.players(id_a), action_a) # Update the history of player two
+				self.players(id_a).update_history(self.players(id_b), action_b, action_a) # Update the history of player one
+				self.players(id_b).update_history(self.players(id_a), action_a, action_b) # Update the history of player two
 
 				#print(self.players(id_a)._history)
 				#print(self.players(id_b)._history)
