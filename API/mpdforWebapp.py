@@ -26,6 +26,19 @@ Kr = 2
 Krb = 2
 Krc = 2
 
+# For Bayesian
+def p11(points, history, my_action, ad_action, op11):
+	return 1
+
+def p12(points, history, my_action, ad_action, op12):
+	return 0
+
+def p21(points, history, my_action, ad_action, op21):
+	return 1
+
+def p22(points, history, my_action, ad_action, op22):
+	return 0
+
 class player:
 	def __init__(self):
 		self._strategy = P[1]      # The player can distinguish each other in the base model so the strategies stored in a dictionary
