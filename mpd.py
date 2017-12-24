@@ -8,7 +8,7 @@ U = [[[2,-1],[3,0]],[[2,3],[-1,0]]]  # The matrix is 2 by 2 by 2
 
 # Define the game scality here
 N = 12  # Initial number of players
-P = [0.0, 0.0, 1.0]  # Initial strategies of players
+P = [0.0, 0.5, 1.0]  # Initial strategies of players
 R = 80   # The rounds played
 M = 5  # The number of games played in each round
 T = ["TFT", "Constant"] # The types contained in the game
