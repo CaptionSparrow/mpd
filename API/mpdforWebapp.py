@@ -121,7 +121,7 @@ class player:
 		d_u = U[0][act][ad_action]
 		d_au = U[1][act][ad_action]
 
-		self.add_points(self, d_u)
+		self.add_points(d_u)
 
 		return (act, d_u, d_au)
 
