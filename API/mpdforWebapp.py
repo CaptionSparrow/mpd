@@ -39,6 +39,25 @@ def p21(points, history, my_action, ad_action, op21):
 def p22(points, history, my_action, ad_action, op22):
 	return 0
 
+# Some useful functions
+def cBetray_times(history):
+	times = 0
+	for i in range(history[0] + 1, 2, -1):
+		if history[i] == 1:
+			times += 1
+		else:
+			break
+	return times
+
+def cCoop_times(history):
+	times = 0
+	for i in range(history[0] + 1, 2, -1):
+		if history[i] == 0:
+			times += 1
+		else:
+			break
+	return times
+
 class player:
 	def __init__(self):
 		self._strategy = P[1]      # The player can distinguish each other in the base model so the strategies stored in a dictionary
