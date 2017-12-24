@@ -27,17 +27,47 @@ Krb = 2
 Krc = 2
 
 # For Bayesian
-def p11(points, history, my_action, ad_action, op11):
-	return 1
+Kb = 5
 
-def p12(points, history, my_action, ad_action, op12):
-	return 0
+def p11(history, myhistory):
+	if history[0] < Kb:
+		return 1
+	else:
+		p = CoopCoop_times(history, myhistory)
+		if p == inf:
+			return 1
+		else:
+			return p
 
-def p21(points, history, my_action, ad_action, op21):
-	return 1
+def p12(history, myhistory):
+	if history[0] < Kb:
+		return 0
+	else:
+		p = CoopBetray_times(history, myhistory)
+		if p == inf:
+			return 1
+		else:
+			return p
 
-def p22(points, history, my_action, ad_action, op22):
-	return 0
+def p21(history, myhistory):
+	if history[0] < Kb:
+		return 1
+	else:
+		p = BetrayCoop_times(history, myhistory)
+		if p == inf:
+			return 1
+		else:
+			return p
+
+def p22(history, myhistory):
+	if history[0] < Kb:
+		return 0
+	else:
+		p = BetrayBetray_times(history, myhistory)
+		if p == inf:
+			return 1
+		else:
+			return p
 
 # Some useful functions
 def cBetray_times(history):
@@ -57,6 +87,63 @@ def cCoop_times(history):
 		else:
 			break
 	return times
+
+# Some useful functions
+def cBetray_times(history):
+	times = 0
+	for i in range(history[0] + 1, 2, -1):
+		if history[i] == 1:
+			times += 1
+		else:
+			break
+	return times
+
+def cCoop_times(history):
+	times = 0
+	for i in range(history[0] + 1, 2, -1):
+		if history[i] == 0:
+			times += 1
+		else:
+			break
+	return times
+
+def BetrayBetray_times(history, myhistory):
+	if myhistory[1] == 0:
+		return inf
+	else:
+		m = 0
+		n = 0
+		for i in range(2, history[0] + 1):
+			if myhistory[i] == 1:
+				n += 1
+				if history[i] == 1:
+					m += 1
+		return m / n
+
+def CoopBetray_times(history, myhistory):
+	if myhistory[1] == 0:
+		return inf
+	else:
+		return 1 - BetrayBetray_times(history, myhistory)
+
+def BetrayCoop_times(history, myhistory):
+	if myhistory[0] == myhistory[1]:
+		return inf
+	else:
+		m = 0
+		n = 0
+		for i in range(2, history[0] + 1):
+			if myhistory[i] == 0:
+				n += 1
+				if history[i] == 1:
+					m += 1
+		return m / n
+
+def CoopCoop_times(history, myhistory):
+	if myhistory[0] == myhistory[1]:
+		return inf
+	else:
+		return 1 - BetrayCoop_times(history, myhistory)
 
 class player:
 	def __init__(self):
@@ -114,10 +201,13 @@ class player:
 			elif cCoop_times(self._history) > Krc:
 				self._strategy = 1.
 		elif self.getType() == "Bayesian":
-			self._matrix[0, 0] = p11(self.points(), self._history, my_action, ad_action, self._matrix[0, 0])
-			self._matrix[0, 1] = p12(self.points(), self._history, my_action, ad_action, self._matrix[0, 1])
-			self._matrix[1, 0] = p21(self.points(), self._history, my_action, ad_action, self._matrix[1, 0])
-			self._matrix[1, 1] = p22(self.points(), self._history, my_action, ad_action, self._matrix[1, 1])
+			self._matrix[0, 0] = p11(self._history, self._myhistory)
+			self._matrix[0, 1] = p12(self._history, self._myhistory)
+			self._matrix[1, 0] = p21(self._history, self._myhistory)
+			self._matrix[1, 1] = p22(self._history, self._myhistory)
+			old_p = np.matrix([[self.strategy()], [1 - self.strategy()]])
+			new_p = np.dot(self._matrix, old_p)
+			self._strategy = new_p[0, 0]
 	#----------------To be implenmented----------------#
 
 	def points(self):
@@ -134,7 +224,7 @@ class player:
 		else:
 			act = 1                     # 1 means betrayal
 
-		self.update_history(ad_action)
+		self.update_history(ad_action, act)
 		self.modify_strategy(act,ad_action)
 
 		d_u = U[0][act][ad_action]
@@ -144,7 +234,10 @@ class player:
 
 		return (act, d_u, d_au)
 
-	def update_history(self, ad_action):
+	def update_history(self, ad_action, my_action):
 		self._history[0] += 1			# Playing times add 1
 		self._history[1] += ad_action	# Times betrayal add 1
 		self._history.append(ad_action)
+		self._myhistory[0] += 1			# Playing times add 1
+		self._myhistory[1] += my_action	# Times betrayal add 1
+		self._myhistory.append(my_action)
