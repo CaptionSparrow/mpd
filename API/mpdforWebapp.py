@@ -216,13 +216,16 @@ class player:
 	def add_points(self, u):
 		self._points += u
 
-	def playwith(self, ad_action):
+	def playwith(self, ad_action, isOne):
 		action = rnd.random()
 
 		if action <= self.strategy():
 			act = 0                     # 0 means cooperation
 		else:
 			act = 1                     # 1 means betrayal
+
+		if (isOne == 1):
+			act = 1
 
 		self.update_history(ad_action, act)
 		self.modify_strategy(act,ad_action)
