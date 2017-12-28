@@ -12,8 +12,8 @@ N = 12  # Initial number of players
 P = [0.0, 0.5, 1.0]  # Initial strategies of players
 R = 80   # The rounds played
 M = 5  # The number of games played in each round
-T = ["Action", "Tft"] # The types contained in the game
-folder_name = "ActionvsTft_12_5_80" # Folder name
+T = ["Rand", "Const"] # The types contained in the game
+folder_name = "RandvsConst_12_5_80" # Folder name
 PT = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9] # The proportion of the types
 
 # Define Types
@@ -394,9 +394,9 @@ class game:
 		self._players = []                       # Generate the list of players where each has an id
 		p = int(Prop * n)
 		for i in range(p):
-			self._players.append(player(i, p0[2], Types[0]))
+			self._players.append(player(i, p0[1], Types[0]))
 		for i in range(p, n):
-			self._players.append(player(i, p0[2], Types[1]))
+			self._players.append(player(i, p0[1], Types[1]))
 		#---------------Need Modified---------------#
 
 	def population(self):            # Get the number of the players

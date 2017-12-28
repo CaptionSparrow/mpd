@@ -116,7 +116,7 @@ def BetrayBetray_times(history, myhistory):
 	else:
 		m = 0
 		n = 0
-		for i in range(2, history[0] + 1):
+		for i in range(2, history[0] + 2):
 			if myhistory[i] == 1:
 				n += 1
 				if history[i] == 1:
@@ -135,7 +135,7 @@ def BetrayCoop_times(history, myhistory):
 	else:
 		m = 0
 		n = 0
-		for i in range(2, history[0] + 1):
+		for i in range(2, history[0] + 2):
 			if myhistory[i] == 0:
 				n += 1
 				if history[i] == 1:
