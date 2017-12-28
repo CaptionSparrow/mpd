@@ -153,6 +153,7 @@ class player:
 		self._type = Types[t]
 
 		self._history = [0,0]       # The playing history of the players
+		self._myhistory = [0,0]
 
 		#--For Bayesian Type--#
 		self._matrix = np.matrix([[1., 0.], [0., 1.]])
