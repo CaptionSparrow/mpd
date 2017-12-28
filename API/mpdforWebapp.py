@@ -13,7 +13,7 @@ M = 5  # The number of games played in each round
 T = ["TFT", "Random"] # The types contained in the game
 PT = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9] # The proportion of the types
 
-Types = ["Constant", "Random", "Action_based", "TFT", "Co_TFT", "Revenger", "Krevenger", "RKrevenger", "Bayesian"]
+Types = ["Random", "TFT", "Revenger", "Bayesian"]
 
 # Parameters
 # For Action_based
@@ -149,7 +149,7 @@ class player:
 	def __init__(self):
 		self._strategy = P[1]      # The player can distinguish each other in the base model so the strategies stored in a dictionary
 		self._points = 0         # The initial score of the player is 0
-		t = rnd.randint(0,8)
+		t = rnd.randint(0,3)
 		self._type = Types[t]
 
 		self._history = [0,0]       # The playing history of the players
