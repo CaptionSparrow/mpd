@@ -3,7 +3,7 @@ import numpy as np
 from copy import deepcopy
 import math
 
-inf = math.inf
+inf = float("inf")
 
 # Define the utility matrix here
 U = [[[2,-1],[3,0]],[[2,3],[-1,0]]]  # The matrix is 2 by 2 by 2
