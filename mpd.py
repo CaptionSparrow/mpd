@@ -396,7 +396,7 @@ class game:
 		for i in range(p):
 			self._players.append(player(i, p0[2], Types[0]))
 		for i in range(p, n):
-			self._players.append(player(i, p0[1], Types[1]))
+			self._players.append(player(i, p0[2], Types[1]))
 		#---------------Need Modified---------------#
 
 	def population(self):            # Get the number of the players
