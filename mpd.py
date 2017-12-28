@@ -13,6 +13,7 @@ P = [0.0, 0.5, 1.0]  # Initial strategies of players
 R = 80   # The rounds played
 M = 5  # The number of games played in each round
 T = ["TFT", "Random"] # The types contained in the game
+folder_name = "TftvsRand_12_5_80" # Folder name
 PT = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9] # The proportion of the types
 
 # Define Types
@@ -95,7 +96,7 @@ def p22(history, myhistory):
 # Write data in file with json format
 #----------------------------------------------------------#
 def wdata_points(data, num):
-	f = open("data\\TftvsRand_12_5_80\\points_0_"+str(num+1)+".json", 'w')
+	f = open("data\\"+folder_name+"\\points_0_"+str(num+1)+".json", 'w')
 	n = len(data)
 	m = len(data[0])
 	print("{", file=f)
@@ -122,7 +123,7 @@ def wdata_points(data, num):
 
 	#------------------------------------#
 
-	f = open("data\\TftvsRand_12_5_80\\pointsp_0_"+str(num+1)+".json", 'w')
+	f = open("data\\"+folder_name+"\\pointsp_0_"+str(num+1)+".json", 'w')
 	print("{", file=f)
 
 	print('  "Points":[', end="", file=f)
@@ -154,7 +155,7 @@ def wdata_points(data, num):
 	f.close()
 
 def wdata_actions(data, num):
-	f = open("data\\TftvsRand_12_5_80\\actions_0_"+str(num+1)+".json", 'w')
+	f = open("data\\"+folder_name+"\\actions_0_"+str(num+1)+".json", 'w')
 	n = len(data)
 	m = len(data[0])
 	print("{", file=f)
@@ -181,7 +182,7 @@ def wdata_actions(data, num):
 
 		#------------------------------------#
 
-	f = open("data\\TftvsRand_12_5_80\\actionsp_0_"+str(num+1)+".json", 'w')
+	f = open("data\\"+folder_name+"\\actionsp_0_"+str(num+1)+".json", 'w')
 	print("{", file=f)
 
 	print('  "Data":[', end="", file=f)
