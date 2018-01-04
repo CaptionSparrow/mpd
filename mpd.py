@@ -9,11 +9,11 @@ U = [[[2,-1],[3,0]],[[2,3],[-1,0]]]  # The matrix is 2 by 2 by 2
 
 # Define the game scality here
 N = 12  # Initial number of players
-P = [0.0, 0.5, 1.0]  # Initial strategies of players
+P = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]  # Initial strategies of players
 R = 80   # The rounds played
 M = 5  # The number of games played in each round
-T = ["Bayesian", "RKrevenger"] # The types contained in the game
-folder_name = "BayesianvsRKrevenger_12_5_80" # Folder name
+T = ["Bayesian", "Const"] # The types contained in the game
+folder_name = "BayesianvsConst_12_5_80" # Folder name
 PT = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9] # The proportion of the types
 
 # Define Types
@@ -95,8 +95,8 @@ def p22(history, myhistory):
 
 # Write data in file with json format
 #----------------------------------------------------------#
-def wdata_points(data, num):
-	f = open("data\\"+folder_name+"\\points_0_"+str(num+1)+".json", 'w')
+def wdata_points(data, num, pr):
+	f = open("data\\"+folder_name+"\\points_"+str(pr)+"_"+str(num+1)+".json", 'w')
 	n = len(data)
 	m = len(data[0])
 	print("{", file=f)
@@ -123,7 +123,7 @@ def wdata_points(data, num):
 
 	#------------------------------------#
 
-	f = open("data\\"+folder_name+"\\pointsp_0_"+str(num+1)+".json", 'w')
+	f = open("data\\"+folder_name+"\\pointsp_"+str(pr)+"_"+str(num+1)+".json", 'w')
 	print("{", file=f)
 
 	print('  "Points":[', end="", file=f)
@@ -154,8 +154,8 @@ def wdata_points(data, num):
 
 	f.close()
 
-def wdata_actions(data, num):
-	f = open("data\\"+folder_name+"\\actions_0_"+str(num+1)+".json", 'w')
+def wdata_actions(data, num, pr):
+	f = open("data\\"+folder_name+"\\actions_"+str(pr)+"_"+str(num+1)+".json", 'w')
 	n = len(data)
 	m = len(data[0])
 	print("{", file=f)
@@ -182,7 +182,7 @@ def wdata_actions(data, num):
 
 		#------------------------------------#
 
-	f = open("data\\"+folder_name+"\\actionsp_0_"+str(num+1)+".json", 'w')
+	f = open("data\\"+folder_name+"\\actionsp_"+str(pr)+"_"+str(num+1)+".json", 'w')
 	print("{", file=f)
 
 	print('  "Data":[', end="", file=f)
@@ -394,9 +394,9 @@ class game:
 		self._players = []                       # Generate the list of players where each has an id
 		p = int(Prop * n)
 		for i in range(p):
-			self._players.append(player(i, p0[1], Types[0]))
+			self._players.append(player(i, 0.5, Types[0]))
 		for i in range(p, n):
-			self._players.append(player(i, p0[2], Types[1]))
+			self._players.append(player(i, p0, Types[1]))
 		#---------------Need Modified---------------#
 
 	def population(self):            # Get the number of the players
@@ -464,14 +464,15 @@ class game:
 #---------------Main program goes from here----------------#
 if __name__ == '__main__':
 	for i in range(9):
-		print("Initializing...")
-		new_game = game(N, P, U, T, PT[i])
+		for j in range(11):
+			print("Initializing...")
+			new_game = game(N, P[j], U, T, PT[i])
 
-		print("Simulating...")
-		(actions_data, points_data, strategys_data) = new_game.play(R, M)
+			print("Simulating...")
+			(actions_data, points_data, strategys_data) = new_game.play(R, M)
 
-		print("Writing Results...")
-		wdata_points(points_data, i)
-		wdata_actions(actions_data, i)
+			print("Writing Results...")
+			wdata_points(points_data, i, j)
+			wdata_actions(actions_data, i, j)
 
-		print("Done")
+			print("Done")
