@@ -2,7 +2,7 @@
 #ROUND <- 80
 Plist <- c("10", "9", "8", "7", "6", "5", "4", "3", "2", "1", "0")
 PTlist <- c("9", "8", "7", "6", "5", "4", "3", "2", "1")
-folder <- "RKrevengervsConst_12_5_80"
+folder <- "RandvsConst_12_5_80"
 
 for (P in Plist) {
   for (PT in PTlist) {

@@ -12,8 +12,8 @@ N = 12  # Initial number of players
 P = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]  # Initial strategies of players
 R = 80   # The rounds played
 M = 5  # The number of games played in each round
-T = ["Bayesian", "Const"] # The types contained in the game
-folder_name = "BayesianvsConst_12_5_80" # Folder name
+T = ["Random", "Const"] # The types contained in the game
+folder_name = "RandvsConst_12_5_80" # Folder name
 PT = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9] # The proportion of the types
 
 # Define Types
