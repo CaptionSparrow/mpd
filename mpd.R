@@ -2,14 +2,15 @@
 #ROUND <- 80
 Plist <- c("10", "9", "8", "7", "6", "5", "4", "3", "2", "1", "0")
 PTlist <- c("9", "8", "7", "6", "5", "4", "3", "2", "1")
+folder <- "RKrevengervsConst_12_5_80"
 
-for (P in Plist[11:11]) {
+for (P in Plist) {
   for (PT in PTlist) {
     rawjson <- rjson::fromJSON(file =
-                                 paste("data/TftvsRand_12_5_80/points_",
+                                 paste("data/",folder,"/points_",
                                        P,"_",PT,".json", sep=""))
     rawpjson <- rjson::fromJSON(file =
-                                  paste("data/TftvsRand_12_5_80/pointsp_",
+                                  paste("data/",folder,"/pointsp_",
                                         P,"_",PT,".json", sep=""))
     
     Data <- as.data.frame(rawjson)
@@ -24,7 +25,7 @@ for (P in Plist[11:11]) {
                                  color=categ)
                          ) + ggplot2::geom_line(size=1.2)
     
-    png(paste("data/TftvsRand_12_5_80/figs/",P,"_",PT,".png",sep=""))
+    png(paste("data/",folder,"/figs/",P,"_",PT,".png",sep=""))
     
     plot(p)
     
